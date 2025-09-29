@@ -1,36 +1,233 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Summary | GUDLFT Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        h2 {
+            color: #0f2027;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(44, 83, 100, 0.4);
+        }
+
+        .messages {
+            background: #e3f2fd;
+            border-left: 4px solid #2c5364;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+        }
+
+        .messages ul {
+            list-style: none;
+        }
+
+        .messages li {
+            color: #0f2027;
+            font-weight: 500;
+            padding: 5px 0;
+        }
+
+        .points-badge {
+            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            display: inline-block;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(44, 83, 100, 0.3);
+        }
+
+        h3 {
+            color: #0f2027;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .competitions-list {
+            list-style: none;
+        }
+
+        .competition-item {
+            background: #f8f9fa;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .competition-item:hover {
+            border-color: #2c5364;
+            box-shadow: 0 5px 20px rgba(44, 83, 100, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .competition-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0f2027;
+            margin-bottom: 12px;
+        }
+
+        .competition-details {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .competition-details strong {
+            color: #0f2027;
+            font-weight: 600;
+        }
+
+        .book-btn {
+            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .book-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(44, 83, 100, 0.4);
+        }
+
+        hr {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            .competition-item {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-        <h2>Welcome, {{club['email']}} </h2><a href="{{url_for('logout')}}">Logout</a>
+    <div class="container">
+        <div class="header">
+            <h2>Welcome, {{club['email']}}</h2>
+            <a href="{{url_for('logout')}}" class="logout-btn">Logout</a>
+        </div>
 
-    {% with messages = get_flashed_messages()%}
-    {% if messages %}
-        <ul>
-       {% for message in messages %}
-            <li>{{message}}</li>
-        {% endfor %}
-       </ul>
-    {% endif%}
-    Points available: {{club['points']}}
-    <h3>Competitions:</h3>
-    <ul>
-        {% for comp in competitions%}
-        <li>
-            {{comp['name']}}<br />
-            Date: {{comp['date']}}</br>
-            Number of Places: {{comp['numberOfPlaces']}}
-            {%if comp['numberOfPlaces']|int >0%}
-            <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}">Book Places</a>
-            {%endif%}
-        </li>
-        <hr />
-        {% endfor %}
-    </ul>
-    {%endwith%}
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="messages">
+            <ul>
+                {% for message in messages %}
+                <li>{{message}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% endwith %}
 
+        <div class="points-badge">
+            💎 Points available: {{club['points']}}
+        </div>
+
+        <h3>🏆 Competitions:</h3>
+        <ul class="competitions-list">
+            {% for comp in competitions %}
+            <li class="competition-item">
+                <div class="competition-name">{{comp['name']}}</div>
+                <div class="competition-details">
+                    <strong>Date:</strong> {{comp['date']}}<br>
+                    <strong>Number of Places:</strong> {{comp['numberOfPlaces']}}
+                </div>
+                {% if comp['numberOfPlaces']|int > 0 %}
+                <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}" class="book-btn">
+                    📝 Book Places
+                </a>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
