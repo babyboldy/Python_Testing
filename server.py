@@ -1,6 +1,6 @@
 import json
 from flask import Flask, render_template, request, redirect, flash, url_for
-
+from datetime import datetime
 
 def loadClubs():
     with open('clubs.json') as c:
@@ -12,6 +12,7 @@ def loadCompetitions():
     with open('competitions.json') as comps:
          listOfCompetitions = json.load(comps)['competitions']
          return listOfCompetitions
+
 
 
 app = Flask(__name__)
@@ -38,11 +39,19 @@ def showSummary():
 def book(competition, club):
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
+    
     if foundClub and foundCompetition:
+        # Vérifier si le club a déjà réservé 12 places pour cette compétition
+        if foundClub['name'] in booking_history:
+            already_booked = booking_history[foundClub['name']].get(foundCompetition['name'], 0)
+            if already_booked >= 12:
+                flash(f'Vous avez déjà réservé le maximum de 12 places pour la compétition "{foundCompetition["name"]}".')
+                return render_template('welcome.html', club=foundClub, competitions=competitions)
+        
         return render_template('booking.html', club=foundClub, competition=foundCompetition)
     else:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('welcome.html', club=foundClub, competitions=competitions)
 
 
 @app.route('/purchasePlaces', methods=['POST'])
@@ -69,12 +78,14 @@ def purchasePlaces():
         places_remaining = 12 - already_booked
         if places_remaining > 0:
             flash(f'Vous avez déjà réservé {already_booked} place(s) pour cette compétition. Vous ne pouvez réserver que {places_remaining} place(s) supplémentaire(s) (maximum 12 places par compétition).')
+            
         else:
             flash(f'Vous avez déjà réservé 12 places pour cette compétition. Vous ne pouvez plus réserver de places.')
         return render_template('booking.html', club=club, competition=competition)
     
     # Validation 3: Vérifier que le club a suffisamment de points
     club_points = int(club['points'])
+
     if placesRequired > club_points:
         flash(f'Vous n\'avez pas assez de points. Points disponibles: {club_points}')
         return render_template('booking.html', club=club, competition=competition)
