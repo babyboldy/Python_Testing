@@ -13,6 +13,13 @@ def loadCompetitions():
          listOfCompetitions = json.load(comps)['competitions']
          return listOfCompetitions
 
+def is_competition_past(competition_date):
+    """Vérifie si une compétition est passée"""
+    try:
+        competition_datetime = datetime.strptime(competition_date, '%Y-%m-%d %H:%M:%S')
+        return competition_datetime < datetime.now()
+    except ValueError:
+        return True  # Par sécurité si format invalide
 
 
 app = Flask(__name__)
@@ -40,6 +47,11 @@ def book(competition, club):
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
     
+    # Vérification 1: La compétition est-elle passée ?
+    if is_competition_past(foundCompetition['date']):
+        flash(f'La compétition "{foundCompetition["name"]}" est déjà passée.')
+        return render_template('welcome.html', club=foundClub, competitions=competitions)
+    
     if foundClub and foundCompetition:
         # Vérifier si le club a déjà réservé 12 places pour cette compétition
         if foundClub['name'] in booking_history:
@@ -59,6 +71,11 @@ def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
+    
+    # Validation 0: Vérifier si la compétition est passée
+    if is_competition_past(competition['date']):
+        flash(f'La compétition est déjà passée.')
+        return render_template('welcome.html', club=club, competitions=competitions)
     
     # Validation 1: Vérifier que le nombre de places est positif
     if placesRequired <= 0:
