@@ -28,9 +28,23 @@ app.secret_key = 'something_special'
 competitions = loadCompetitions()
 clubs = loadClubs()
 
+# Cache en mémoire pour accélérer l'affichage du tableau des points
+cached_sorted_clubs = []
+
+def refresh_sorted_clubs():
+    """Recalcule et met en cache la liste des clubs triée par points (desc)."""
+    global cached_sorted_clubs
+    try:
+        cached_sorted_clubs = sorted(clubs, key=lambda c: int(c.get('points', 0)), reverse=True)
+    except Exception:
+        cached_sorted_clubs = clubs
+
 # Dictionnaire pour suivre les réservations par club et par compétition
 # Structure: {club_name: {competition_name: total_places_booked}}
 booking_history = {}
+
+# Préparer le cache au démarrage
+refresh_sorted_clubs()
 
 @app.route('/')
 def root():
@@ -42,10 +56,8 @@ def index():
 
 # affichage du tableau des points de chaque club sur welcome.html
 def get_sorted_clubs():
-    try:
-        return sorted(clubs, key=lambda c: int(c.get('points', 0)), reverse=True), None
-    except Exception as e:
-        return clubs, e
+    """Retourne la liste des clubs triés depuis le cache (refresh ailleurs)."""
+    return cached_sorted_clubs, None
 
 @app.route('/showSummary', methods=['POST'])
 def showSummary():
@@ -140,6 +152,9 @@ def purchasePlaces():
     
     # Mettre à jour l'historique des réservations
     booking_history[club['name']][competition['name']] = total_places_after_booking
+
+    # Rafraîchir le cache trié suite à la mise à jour des points
+    refresh_sorted_clubs()
     
     flash(f'Réservation confirmée! {placesRequired} place(s) réservée(s). Total réservé pour cette compétition: {total_places_after_booking}. Points restants: {club["points"]}')
 # affichage du tableau des points de chaque club sur welcome.html
