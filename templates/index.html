@@ -145,7 +145,10 @@
                 <label for="email">Email Address:</label>
                 <input type="email" name="email" id="email" placeholder="secretary@example.com" required/>
             </div>
-            <button type="submit">Enter Portal</button>
+            <div class="actions">
+                <button type="submit">Enter Portal</button>
+                <a class="button-link" href="{{ url_for('points') }}">View Club Points</a>
+            </div>        
         </form>
     </div>
 </body>

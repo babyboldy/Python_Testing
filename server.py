@@ -124,6 +124,18 @@ def purchasePlaces():
     return render_template('welcome.html', club=club, competitions=competitions)
 
 
+#Tableau des points de chaque club
+@app.route('/points')
+def points():
+    """Page publique affichant le total des points par club (lecture seule)."""
+    try:
+        sorted_clubs = sorted(clubs, key=lambda c: int(c.get('points', 0)), reverse=True)
+    except Exception:
+        # En cas de données inattendues, on ne trie pas
+        sorted_clubs = clubs
+    return render_template('points.html', clubs=sorted_clubs)
+
+
 # TODO: Add route for points display
 
 
