@@ -34,7 +34,7 @@ booking_history = {}
 
 @app.route('/')
 def root():
-    return redirect(url_for('points'))
+    return render_template('index.html')
 
 @app.route('/index')
 def index():
