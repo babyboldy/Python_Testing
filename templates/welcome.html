@@ -5,207 +5,173 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Summary | GUDLFT Registration</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg-1: #0f2027;
+            --bg-2: #203a43;
+            --bg-3: #2c5364;
+            --card-bg: rgba(255, 255, 255, 0.10);
+            --card-border: rgba(255, 255, 255, 0.22);
+            --text-primary: #f2f6f8;
+            --text-secondary: #c9d6df;
+            --accent: #61dafb;
+            --ring: rgba(97, 218, 251, 0.35);
+            --shadow: rgba(0, 0, 0, 0.35);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            color: var(--text-primary);
+            background:
+                radial-gradient(1200px 800px at 10% 10%, rgba(255,255,255,0.06), transparent 40%),
+                radial-gradient(1000px 600px at 90% 30%, rgba(255,255,255,0.05), transparent 45%),
+                linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
             min-height: 100vh;
-            padding: 20px;
-            color: #333;
+            padding: 28px;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1160px;
             margin: 0 auto;
-            background: white;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            animation: fadeIn 0.5s ease-in;
+            box-shadow: 0 24px 60px var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px) saturate(140%);
+            -webkit-backdrop-filter: blur(10px) saturate(140%);
+            padding: 36px 34px;
+            animation: cardIn 480ms cubic-bezier(.2,.7,.2,1);
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        @keyframes cardIn { from { opacity: 0; transform: translateY(14px) scale(.98);} to { opacity: 1; transform: translateY(0) scale(1);} }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e0e0e0;
-            flex-wrap: wrap;
-            gap: 15px;
+            gap: 16px;
+            margin-bottom: 26px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.14);
         }
 
         h2 {
-            color: #0f2027;
+            color: #ffffff;
             font-size: 28px;
-            font-weight: 600;
+            font-weight: 800;
+            letter-spacing: .2px;
         }
 
         .logout-btn {
-            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
-            color: white;
-            padding: 12px 25px;
+            background: linear-gradient(135deg, #61dafb 0%, #00e0ff 45%, #00b3ff 100%);
+            color: #0b1b22;
+            padding: 12px 18px;
             text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: inline-block;
+            border-radius: 12px;
+            font-weight: 800;
+            letter-spacing: .3px;
+            box-shadow: 0 10px 24px rgba(0, 179, 255, 0.35), inset 0 1px 0 rgba(255,255,255,.5);
+            transition: transform .08s ease, filter .2s ease, box-shadow .2s ease;
         }
-
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(44, 83, 100, 0.4);
-        }
+        .logout-btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
+        .logout-btn:active { transform: translateY(0); filter: brightness(.98); }
+        .logout-btn:focus-visible { outline: none; box-shadow: 0 0 0 4px var(--ring), 0 10px 24px rgba(0, 179, 255, 0.35); }
 
         .messages {
-            background: #e3f2fd;
-            border-left: 4px solid #2c5364;
-            padding: 15px 20px;
-            margin-bottom: 25px;
-            border-radius: 8px;
+            background: rgba(97, 218, 251, 0.10);
+            border: 1px solid rgba(97, 218, 251, 0.35);
+            padding: 14px 16px;
+            margin-bottom: 22px;
+            border-radius: 12px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
         }
-
-        .messages ul {
-            list-style: none;
-        }
-
-        .messages li {
-            color: #0f2027;
-            font-weight: 500;
-            padding: 5px 0;
-        }
+        .messages ul { list-style: none; }
+        .messages li { color: var(--text-primary); font-weight: 600; padding: 5px 0; }
 
         .points-badge {
-            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 12px;
-            display: inline-block;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(44, 83, 100, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+            color: #ffffff;
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.22);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.12);
+            margin-bottom: 26px;
         }
 
         h3 {
-            color: #0f2027;
-            font-size: 24px;
-            margin-bottom: 20px;
-            font-weight: 600;
+            color: #ffffff;
+            font-size: 22px;
+            margin-bottom: 16px;
+            font-weight: 800;
+            letter-spacing: .2px;
         }
 
-        .competitions-list {
-            list-style: none;
-        }
+        .competitions-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
 
         .competition-item {
-            background: #f8f9fa;
-            padding: 25px;
-            margin-bottom: 20px;
-            border-radius: 12px;
-            border: 2px solid #e0e0e0;
-            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.10);
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.22);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.12);
+            transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease;
         }
-
-        .competition-item:hover {
-            border-color: #2c5364;
-            box-shadow: 0 5px 20px rgba(44, 83, 100, 0.15);
-            transform: translateY(-2px);
-        }
+        .competition-item:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(0,0,0,0.30); border-color: rgba(97,218,251,0.45); }
 
         .competition-name {
-            font-size: 20px;
-            font-weight: 600;
-            color: #0f2027;
-            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 10px;
+            letter-spacing: .2px;
         }
 
-        .competition-details {
-            color: #555;
-            line-height: 1.8;
-            margin-bottom: 15px;
-        }
+        .competition-details { color: var(--text-secondary); line-height: 1.7; margin-bottom: 14px; }
+        .competition-details strong { color: #ffffff; font-weight: 700; }
 
-        .competition-details strong {
-            color: #0f2027;
-            font-weight: 600;
-        }
-
-        .competition-past {
-            background: #f5f5f5;
-            opacity: 0.7;
-        }
-
-        .competition-past .competition-name {
-            color: #999;
-        }
-
+        .competition-past { opacity: 0.7; filter: grayscale(.1); }
+        .competition-past .competition-name { color: #c2c9cf; }
         .past-badge {
             display: inline-block;
-            background: #e0e0e0;
-            color: #666;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-left: 10px;
+            background: rgba(255,255,255,0.15);
+            color: #e5eaee;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            margin-left: 8px;
+            letter-spacing: .4px;
+            border: 1px solid rgba(255,255,255,0.25);
             text-transform: uppercase;
         }
 
         .book-btn {
-            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
-            color: white;
-            padding: 10px 20px;
+            background: linear-gradient(135deg, #61dafb 0%, #00e0ff 45%, #00b3ff 100%);
+            color: #0b1b22;
+            padding: 10px 16px;
             text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
+            border-radius: 12px;
+            font-weight: 800;
+            letter-spacing: .3px;
             display: inline-block;
-            margin-top: 10px;
-            transition: all 0.3s ease;
+            margin-top: 6px;
+            box-shadow: 0 10px 24px rgba(0, 179, 255, 0.30), inset 0 1px 0 rgba(255,255,255,.5);
+            transition: transform .08s ease, filter .2s ease, box-shadow .2s ease;
         }
+        .book-btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
+        .book-btn:active { transform: translateY(0); filter: brightness(.98); }
+        .book-btn:focus-visible { outline: none; box-shadow: 0 0 0 4px var(--ring), 0 10px 24px rgba(0, 179, 255, 0.35); }
 
-        .book-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(44, 83, 100, 0.4);
-        }
-
-        hr {
-            display: none;
-        }
+        hr { display: none; }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 25px;
-            }
-
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            h2 {
-                font-size: 22px;
-            }
-
-            .competition-item {
-                padding: 20px;
-            }
+            .container { padding: 26px; }
+            .header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            h2 { font-size: 24px; }
         }
     </style>
 </head>
@@ -232,7 +198,31 @@
             💎 Points available: {{club['points']}}
         </div>
 
-        <h3>🏆 Competitions:</h3>
+        {% if clubs %}
+        <h3 style="margin-top:0">📊 Club Points:</h3>
+        <div class="table-wrap" style="margin-top:12px; border:1px solid rgba(255,255,255,0.18); border-radius:14px; overflow:hidden; box-shadow: 0 12px 28px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.12);">
+            <table style="width:100%; border-collapse:collapse;">
+                <thead style="background: rgba(255,255,255,0.12);">
+                    <tr>
+                        <th style="padding:14px 16px; text-align:left; font-size:13px; letter-spacing:.3px; text-transform:uppercase; color:#e5eaee; width:80px;">#</th>
+                        <th style="padding:14px 16px; text-align:left; font-size:13px; letter-spacing:.3px; text-transform:uppercase; color:#e5eaee;">Club</th>
+                        <th style="padding:14px 16px; text-align:left; font-size:13px; letter-spacing:.3px; text-transform:uppercase; color:#e5eaee;">Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in clubs %}
+                    <tr style="transition: background .15s ease; {% if loop.index0 % 2 == 1 %}background: rgba(255,255,255,0.04);{% endif %}">
+                        <td style="padding:14px 16px; color:#e5eaee; font-weight:700;">{{ loop.index }}</td>
+                        <td style="padding:14px 16px; color:#fff;">{{ c['name'] }}</td>
+                        <td style="padding:14px 16px; font-weight:800; color:#61dafb;">{{ c['points'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        <h3 style="margin-top:24px">🏆 Competitions:</h3>
         <ul class="competitions-list">
             {% for comp in competitions %}
             <li class="competition-item">

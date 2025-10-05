@@ -33,13 +33,26 @@ clubs = loadClubs()
 booking_history = {}
 
 @app.route('/')
+def root():
+    return redirect(url_for('points'))
+
+@app.route('/index')
 def index():
     return render_template('index.html')
+
+# affichage du tableau des points de chaque club sur welcome.html
+def get_sorted_clubs():
+    try:
+        return sorted(clubs, key=lambda c: int(c.get('points', 0)), reverse=True), None
+    except Exception as e:
+        return clubs, e
 
 @app.route('/showSummary', methods=['POST'])
 def showSummary():
     club = [club for club in clubs if club['email'] == request.form['email']][0]
-    return render_template('welcome.html', club=club, competitions=competitions)
+    # affichage du tableau des points de chaque club sur welcome.html
+    sorted_clubs, _ = get_sorted_clubs()
+    return render_template('welcome.html', club=club, competitions=competitions, clubs=sorted_clubs)
 
 
 @app.route('/book/<competition>/<club>')
@@ -50,7 +63,9 @@ def book(competition, club):
     # Vérification 1: La compétition est-elle passée ?
     if is_competition_past(foundCompetition['date']):
         flash(f'La compétition "{foundCompetition["name"]}" est déjà passée.')
-        return render_template('welcome.html', club=foundClub, competitions=competitions)
+# affichage du tableau des points de chaque club sur welcome.html
+        sorted_clubs, _ = get_sorted_clubs()
+        return render_template('welcome.html', club=foundClub, competitions=competitions, clubs=sorted_clubs)
     
     if foundClub and foundCompetition:
         # Vérifier si le club a déjà réservé 12 places pour cette compétition
@@ -58,12 +73,16 @@ def book(competition, club):
             already_booked = booking_history[foundClub['name']].get(foundCompetition['name'], 0)
             if already_booked >= 12:
                 flash(f'Vous avez déjà réservé le maximum de 12 places pour la compétition "{foundCompetition["name"]}".')
-                return render_template('welcome.html', club=foundClub, competitions=competitions)
+# affichage du tableau des points de chaque club sur welcome.html
+                sorted_clubs, _ = get_sorted_clubs()
+                return render_template('welcome.html', club=foundClub, competitions=competitions, clubs=sorted_clubs)
         
         return render_template('booking.html', club=foundClub, competition=foundCompetition)
     else:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=foundClub, competitions=competitions)
+# affichage du tableau des points de chaque club sur welcome.html
+        sorted_clubs, _ = get_sorted_clubs()
+        return render_template('welcome.html', club=foundClub, competitions=competitions, clubs=sorted_clubs)
 
 
 @app.route('/purchasePlaces', methods=['POST'])
@@ -75,7 +94,9 @@ def purchasePlaces():
     # Validation 0: Vérifier si la compétition est passée
     if is_competition_past(competition['date']):
         flash(f'La compétition est déjà passée.')
-        return render_template('welcome.html', club=club, competitions=competitions)
+# affichage du tableau des points de chaque club sur welcome.html
+        sorted_clubs, _ = get_sorted_clubs()
+        return render_template('welcome.html', club=club, competitions=competitions, clubs=sorted_clubs)
     
     # Validation 1: Vérifier que le nombre de places est positif
     if placesRequired <= 0:
@@ -121,7 +142,9 @@ def purchasePlaces():
     booking_history[club['name']][competition['name']] = total_places_after_booking
     
     flash(f'Réservation confirmée! {placesRequired} place(s) réservée(s). Total réservé pour cette compétition: {total_places_after_booking}. Points restants: {club["points"]}')
-    return render_template('welcome.html', club=club, competitions=competitions)
+# affichage du tableau des points de chaque club sur welcome.html
+    sorted_clubs, _ = get_sorted_clubs()
+    return render_template('welcome.html', club=club, competitions=competitions, clubs=sorted_clubs)
 
 
 #Tableau des points de chaque club
@@ -134,9 +157,6 @@ def points():
         # En cas de données inattendues, on ne trie pas
         sorted_clubs = clubs
     return render_template('points.html', clubs=sorted_clubs)
-
-
-# TODO: Add route for points display
 
 
 @app.route('/logout')
