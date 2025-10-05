@@ -231,11 +231,12 @@
                     <strong>Date:</strong> {{comp['date']}}<br>
                     <strong>Number of Places:</strong> {{comp['numberOfPlaces']}}
                 </div>
-                {% if comp['numberOfPlaces']|int > 0 %}
-                <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}" class="book-btn">
-                    📝 Book Places
-                </a>
-                {% endif %}
+                <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                    {% if comp['numberOfPlaces']|int > 0 %}
+                    <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}" class="book-btn">📝 Book Places</a>
+                    {% endif %}
+                    <a href="{{ url_for('competition_details', competition_name=comp['name']) }}?club={{ club['name'] }}" class="book-btn">🔎 Détails</a>
+                </div>
             </li>
             {% endfor %}
         </ul>

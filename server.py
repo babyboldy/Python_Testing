@@ -181,6 +181,48 @@ def welcome(club_name):
     sorted_clubs, _ = get_sorted_clubs()
     return render_template('welcome.html', club=foundClub, competitions=competitions, clubs=sorted_clubs)
 
+def compute_competition_totals(comp_name):
+    """Retourne (booked_total, total_places_estime) pour une compétition."""
+    booked_total = 0
+    for club_name, per_comp in booking_history.items():
+        booked_total += int(per_comp.get(comp_name, 0))
+    comp = next((c for c in competitions if c['name'] == comp_name), None)
+    if not comp:
+        return 0, 0
+    try:
+        available = int(comp.get('numberOfPlaces', 0))
+    except Exception:
+        available = 0
+    total_estimated = available + booked_total
+    return booked_total, total_estimated
+
+def compute_competition_status(comp) -> str:
+    """Calcule le statut d'inscription en fonction des places et de la date."""
+    try:
+        available = int(comp.get('numberOfPlaces', 0))
+    except Exception:
+        available = 0
+    past = is_competition_past(comp.get('date', ''))
+    if available <= 0:
+        return 'complet'
+    if past:
+        return 'complet'
+    if available <= 3:
+        return 'presque complet'
+    return 'inscriptions ouvertes'
+
+@app.route('/competition/<competition_name>')
+def competition_details(competition_name):
+    comp = next((c for c in competitions if c['name'] == competition_name), None)
+    if not comp:
+        flash("Compétition introuvable")
+        return redirect(url_for('index'))
+    booked_total, total_estimated = compute_competition_totals(competition_name)
+    status = compute_competition_status(comp)
+    club_name = request.args.get('club')
+    foundClub = next((c for c in clubs if c['name'] == club_name), None) if club_name else None
+    return render_template('competition_details.html', competition=comp, booked_total=booked_total, total_estimated=total_estimated, status=status, club=foundClub)
+
 
 @app.route('/logout')
 def logout():

@@ -3,22 +3,56 @@
         {
             "name": "Spring Festival",
             "date": "2020-03-27 10:00:00",
+            "location": "Paris",
             "numberOfPlaces": "25"
         },
         {
             "name": "Fall Classic",
             "date": "2020-10-22 13:30:00",
+            "location": "Paris",
             "numberOfPlaces": "13"
         },
         {
             "name": "NBA Finals",
             "date": "2025-11-25 16:00:00",
+            "location": "Los Angeles",
             "numberOfPlaces": "10"
         },
         {
             "name": "Playoff NBA",
             "date": "2025-12-22 13:00:00",
+            "location": "Los Angeles",
             "numberOfPlaces": "45"
+        },
+        {
+            "name": "European Open",
+            "date": "2026-02-15 09:30:00",
+            "location": "Berlin",
+            "numberOfPlaces": "30"
+        },
+        {
+            "name": "World Cup Qualifier",
+            "date": "2026-04-10 14:00:00",
+            "location": "Madrid",
+            "numberOfPlaces": "28"
+        },
+        {
+            "name": "City Marathon",
+            "date": "2026-06-18 08:00:00",
+            "location": "London",
+            "numberOfPlaces": "50"
+        },
+        {
+            "name": "Grand Slam",
+            "date": "2026-09-05 11:00:00",
+            "location": "New York",
+            "numberOfPlaces": "40"
+        },
+        {
+            "name": "Masters Invitational",
+            "date": "2026-11-12 15:30:00",
+            "location": "Tokyo",
+            "numberOfPlaces": "22"
         }
     ]
 }
