@@ -174,6 +174,14 @@ def points():
     return render_template('points.html', clubs=sorted_clubs)
 
 
+@app.route('/welcome/<club_name>')
+def welcome(club_name):
+    """Accès direct à la page d'accueil d'un club via son nom."""
+    foundClub = [c for c in clubs if c['name'] == club_name][0]
+    sorted_clubs, _ = get_sorted_clubs()
+    return render_template('welcome.html', club=foundClub, competitions=competitions, clubs=sorted_clubs)
+
+
 @app.route('/logout')
 def logout():
     return redirect(url_for('index'))

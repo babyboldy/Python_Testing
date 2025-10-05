@@ -75,6 +75,25 @@
         .messages li { color: var(--text-primary); font-weight: 600; padding: 4px 0; }
 
         form { margin-top: 12px; }
+        .actions { display: flex; gap: 10px; margin-top: 10px; }
+        .button-link {
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
+            width: 100%;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: .3px;
+            color: #0b1b22;
+            background: linear-gradient(135deg, #61dafb 0%, #00e0ff 45%, #00b3ff 100%);
+            box-shadow: 0 10px 24px rgba(0, 179, 255, 0.30), inset 0 1px 0 rgba(255,255,255,0.5);
+            transition: transform .08s ease, box-shadow .2s ease, filter .2s ease;
+        }
+        .button-link:hover { transform: translateY(-1px); filter: brightness(1.03); }
+        .button-link:active { transform: translateY(0); filter: brightness(.98); }
+        .button-link:focus-visible { outline: none; box-shadow: 0 0 0 4px var(--ring), 0 10px 24px rgba(0, 179, 255, 0.35); }
 
         label {
             display: block;
@@ -150,7 +169,10 @@
             <label for="places">How many places?</label>
             <input type="number" name="places" id="places" min="1" required>
 
-            <button type="submit">Book</button>
+            <div class="actions">
+                <button type="submit">Book</button>
+                <a class="button-link" href="{{ url_for('welcome', club_name=club['name']) }}">Fermer</a>
+            </div>
         </form>
     </div>
 </body>
